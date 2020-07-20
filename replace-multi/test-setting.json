@@ -1,0 +1,12 @@
+[
+    {
+        "file": "test1.txt",
+        "regex": "a+",
+        "replacement": "+"
+    },
+    {
+        "file": "test2.txt",
+        "regex": "ab",
+        "replacement": "-"
+    }
+]
