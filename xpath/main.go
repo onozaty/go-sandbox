@@ -45,5 +45,8 @@ func main() {
 		if name != nil {
 			fmt.Printf("#%d name:%s\n", i, name.InnerText())
 		}
+
+		version := xmlquery.FindOne(item, "../../@version")
+		fmt.Printf("#%d version:%s\n", i, version.InnerText())
 	}
 }
