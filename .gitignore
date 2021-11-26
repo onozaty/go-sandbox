@@ -2,3 +2,6 @@
 xpath/xpath.exe
 bolt/bolt.exe
 bolt/my.db
+win-link/win-link.exe
+win-link/src/
+win-link/symlink
