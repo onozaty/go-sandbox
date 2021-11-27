@@ -20,7 +20,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// シンボリックリンク(管理者権限必要)
 	{
 		err := createSymlink(srcDir, filepath.Join(tempDir, "symlink"))
 		if err != nil {
@@ -28,7 +27,6 @@ func main() {
 		}
 	}
 
-	// ジャンクション
 	{
 		err := createJunction(srcDir, filepath.Join(tempDir, "junc"))
 		if err != nil {
@@ -39,20 +37,38 @@ func main() {
 
 func createSymlink(src string, dest string) error {
 
+	// シンボリックリンク作成(要管理者権限)
 	err := os.Symlink(src, dest)
 	if err != nil {
 		return err
 	}
+
+	// リンク元の情報取得
+	linkSrc, err := os.Readlink(dest)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("シンボリックリンク リンク元: %s\n", linkSrc)
 
 	return nil
 }
 
 func createJunction(src string, dest string) error {
 
+	// ジャンクション作成
 	err := mklink("J", dest, src)
 	if err != nil {
 		return err
 	}
+
+	// リンク元の情報取得
+	linkSrc, err := os.Readlink(dest)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("ジャンクション リンク元: %s\n", linkSrc)
 
 	return nil
 }
@@ -61,7 +77,7 @@ func mklink(linktype string, link string, target string) error {
 
 	output, err := exec.Command("cmd", "/c", "mklink", "/"+linktype, link, target).CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("\"mklink /%s %v %v\" command failed: %v\n%v", linktype, link, target, err, string(output))
+		return fmt.Errorf("\"mklink /%s %s %s\" command failed: %v\n%s", linktype, link, target, err, string(output))
 	}
 
 	return nil
