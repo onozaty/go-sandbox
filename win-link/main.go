@@ -14,8 +14,20 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer os.RemoveAll(tempDir)
 
 	srcDir, err := createDir(tempDir, "src")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 適当なファイル作っておく
+	f, err := os.Create(filepath.Join(srcDir, "a.txt"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	_, err = f.WriteString("a")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -51,6 +63,11 @@ func createSymlink(src string, dest string) error {
 
 	fmt.Printf("シンボリックリンク リンク元: %s\n", linkSrc)
 
+	err = os.Remove(dest)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -69,6 +86,11 @@ func createJunction(src string, dest string) error {
 	}
 
 	fmt.Printf("ジャンクション リンク元: %s\n", linkSrc)
+
+	err = os.Remove(dest)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
