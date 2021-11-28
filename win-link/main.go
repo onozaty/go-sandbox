@@ -47,23 +47,23 @@ func main() {
 	}
 }
 
-func createSymlink(src string, dest string) error {
+func createSymlink(src string, link string) error {
 
 	// シンボリックリンク作成(要管理者権限)
-	err := os.Symlink(src, dest)
+	err := os.Symlink(src, link)
 	if err != nil {
 		return err
 	}
 
 	// リンク元の情報取得
-	linkSrc, err := os.Readlink(dest)
+	linkSrc, err := os.Readlink(link)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("シンボリックリンク リンク元: %s\n", linkSrc)
 
-	err = os.Remove(dest)
+	err = os.Remove(link)
 	if err != nil {
 		return err
 	}
@@ -71,23 +71,23 @@ func createSymlink(src string, dest string) error {
 	return nil
 }
 
-func createJunction(src string, dest string) error {
+func createJunction(src string, link string) error {
 
 	// ジャンクション作成
-	err := mklink("J", dest, src)
+	err := mklink("J", link, src)
 	if err != nil {
 		return err
 	}
 
 	// リンク元の情報取得
-	linkSrc, err := os.Readlink(dest)
+	linkSrc, err := os.Readlink(link)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("ジャンクション リンク元: %s\n", linkSrc)
 
-	err = os.Remove(dest)
+	err = os.Remove(link)
 	if err != nil {
 		return err
 	}
